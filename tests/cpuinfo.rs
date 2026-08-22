@@ -6,4 +6,5 @@ fn cpuinfo() {
     assert!(!cpu.model.is_empty());
     assert!(cpu.logical_cores > 0);
     assert!(cpu.physical_cores > 0);
+    assert!(!cpu.flags.is_empty());
 }

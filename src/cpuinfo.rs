@@ -5,6 +5,7 @@ pub struct Cpu {
     pub model: String,
     pub logical_cores: usize,
     pub physical_cores: usize,
+    pub flags: Vec<String>,
 }
 
 pub fn cpuinfo() -> io::Result<Cpu> {
@@ -12,6 +13,7 @@ pub fn cpuinfo() -> io::Result<Cpu> {
     let mut model = String::new();
     let mut logical_cores = 0;
     let mut physical_cores = 0;
+    let mut flags = Vec::new();
 
     for line in fs::read_to_string("/proc/cpuinfo")?.lines() {
         let Some((name, value)) = line.split_once(':') else {
@@ -26,6 +28,9 @@ pub fn cpuinfo() -> io::Result<Cpu> {
             "model name" if model.is_empty() => model = value.to_string(),
             "processor" => logical_cores += 1,
             "cpu cores" if physical_cores == 0 => physical_cores = value.parse().unwrap(),
+            "flags" if flags.is_empty() => {
+                flags = value.split_whitespace().map(String::from).collect()
+            }
             _ => {}
         }
     }
@@ -35,5 +40,6 @@ pub fn cpuinfo() -> io::Result<Cpu> {
         model,
         logical_cores,
         physical_cores,
+        flags,
     })
 }
