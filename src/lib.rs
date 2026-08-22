@@ -1,14 +1,12 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+use std::{fs, io};
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub fn uptime() -> io::Result<f64> {
+    let uptime = fs::read_to_string("/proc/uptime")?
+        .split_whitespace()
+        .next()
+        .unwrap()
+        .parse::<f64>()
+        .unwrap();
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+    Ok(uptime)
 }
