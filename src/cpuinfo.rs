@@ -3,13 +3,15 @@ use std::{fs, io};
 pub struct Cpu {
     pub vendor: String,
     pub model: String,
-    pub cores: usize,
+    pub logical_cores: usize,
+    pub physical_cores: usize,
 }
 
 pub fn cpuinfo() -> io::Result<Cpu> {
     let mut vendor = String::new();
     let mut model = String::new();
-    let mut cores = 0;
+    let mut logical_cores = 0;
+    let mut physical_cores = 0;
 
     for line in fs::read_to_string("/proc/cpuinfo")?.lines() {
         let Some((name, value)) = line.split_once(':') else {
@@ -22,7 +24,8 @@ pub fn cpuinfo() -> io::Result<Cpu> {
         match name {
             "vendor_id" if vendor.is_empty() => vendor = value.to_string(),
             "model name" if model.is_empty() => model = value.to_string(),
-            "processor" => cores += 1,
+            "processor" => logical_cores += 1,
+            "cpu cores" if physical_cores == 0 => physical_cores = value.parse().unwrap(),
             _ => {}
         }
     }
@@ -30,6 +33,7 @@ pub fn cpuinfo() -> io::Result<Cpu> {
     Ok(Cpu {
         vendor,
         model,
-        cores,
+        logical_cores,
+        physical_cores,
     })
 }

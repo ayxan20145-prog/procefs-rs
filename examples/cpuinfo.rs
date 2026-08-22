@@ -3,5 +3,6 @@ fn main() {
 
     println!("Cpu vendor: {}", cpu.vendor);
     println!("Cpu model: {}", cpu.model);
-    println!("Cpu cores: {}", cpu.cores);
+    println!("Logical cpu cores: {}", cpu.logical_cores);
+    println!("Physical cpu cores: {}", cpu.physical_cores);
 }
