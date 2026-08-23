@@ -4,8 +4,10 @@ pub struct Memory {
     pub mem_total: u64,
     pub mem_free: u64,
     pub mem_available: u64,
+    pub mem_used: u64,
     pub swap_total: u64,
     pub swap_free: u64,
+    pub swap_used: u64,
 }
 
 pub fn meminfo() -> io::Result<Memory> {
@@ -35,7 +37,9 @@ pub fn meminfo() -> io::Result<Memory> {
         mem_total,
         mem_free,
         mem_available,
+        mem_used: mem_total - mem_available,
         swap_total,
         swap_free,
+        swap_used: swap_total - swap_free,
     })
 }
