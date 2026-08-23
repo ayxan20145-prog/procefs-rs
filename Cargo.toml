@@ -2,5 +2,9 @@
 name = "procefs-rs"
 version = "0.4.0"
 edition = "2024"
+description = "a simple rust library for reading and parsing linux /proc"
+license = "MIT"
+repository = "https://github.com/ayxan20145-prog/procefs-rs"
+readme = "README.md"
 
 [dependencies]
